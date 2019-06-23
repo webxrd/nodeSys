@@ -10,14 +10,15 @@ var permissions = ["个人所有银行卡","银行卡设置","我的商户","我
 
 // 设置响应头
 app.all('*',function (request,result,next) {
-    console.log('request.headers');
-    console.log(request.headers);
-    console.log('request.url');
-    console.log(request.url);
-    console.log('request.body');
-    console.log(request.body);
-    result.header("Access-Control-Allow-Origin", "http://127.0.0.1:3000,http://localhost:8090,http://127.0.0.1:4000");//允许访问本服务器的地址
-    result.header("Access-Control-Allow-Headers", "X-Requested-With,content-type");//允许访问本服务器的请求头
+    // console.log('request.headers');
+    // console.log(request.headers);
+    // console.log('request.url');
+    // console.log(request.url);
+    // console.log('request.body');
+    // console.log(request.body);
+    result.header("Access-Control-Allow-Origin", "*");//允许访问本服务器的地址
+    // result.header("Access-Control-Allow-Origin", "http://localhost:63342,http://127.0.0.1:3000,http://localhost:8090,http://127.0.0.1:4000");//允许访问本服务器的地址
+    result.header("Access-Control-Allow-Headers", "X-Requested-With,content-type,Authorization");//允许访问本服务器的请求头 ，一般是客户端用于装token ，并在node中headers中通过authorization取得
     result.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");//允许访问本服务器的请求方法
     result.header("X-Powered-By",' 3.2.1');//x - power - by是HTTP响应头之一。X表示标头是扩展标头，即，不符合HTTP标准d。power - by:告诉HTTP客户机请求/响应是由哪个引擎处理的。
     result.header("Content-Type", "application/json;charset=utf-8");
@@ -32,9 +33,12 @@ for (let i in api){
     }
 }
 app.post('/login',function (req,res) {
+    console.log('login_____req.headers');
+    console.log(req.headers);
     console.log('login_____req.body');
     console.log(req.body);
-    var token = jwt.encrypt({username:'abc'},'120');
+    var token = jwt.encrypt({username:'abc'},'60s');
+    console.log(req.headers.authorization);
     res.json({code:200,data:{permissions:permissions,role:1,token:token,uid:1}});
 });
 // 设置http://127.0.0.1:5000的默认页面
